@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>东软图书馆可视化分析系统</title>
+  <script src="js/3rd/echarts.js"></script>
+  <script src="js/3rd/lottie.min.js"></script>
+  <script src="js/3rd/jquery.min.js"></script>
+  <script src="js/3rd/g2.min.js"></script>
+  <script src="js/3rd/three.js"></script>
+  <!--    <script src="js/3rd/three.module.js"></script>-->
+  <!--    <script src="js/3rd/GLTFLoader.js"></script>-->
+  <!--    <script src="js/3rd/OrbitControls.js"></script>-->
+  <style>
+    html,body{
+      margin: 0;
+      padding: 0;
+      height:100%;
+      width:100%;
+      background-color: black;
+      border:1px solid green;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    body{
+      border:1px solid blue;
+      height:100%;
+      width:100%;
+    }
+
+.divcomnum{
+  background: url("./img/border/2.png");
+  position: absolute!important;
+}
+    .divcom{
+      /*border:1px solid red;*/
+      position: absolute!important;
+    }
+    #container{
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url("./img/bg/2.png");
+      background-size: 100% 100%;
+      position: relative;
+      z-index: 0;
+
+    }
+    #titlebar{
+      width: 90%;
+      height:7%;
+      top:0px;
+      margin: auto;
+      z-index: 1;
+      display: flex;  /* 内层元素拉伸（图片）*/
+    }
+    #title{
+      width:50%;
+      height:6%;
+      text-align: center;
+      top:0px;
+      margin:auto;
+      z-index: 3;
+    }
+    #titletext{
+      font-family: 微软雅黑;
+      font-size: 1.6vw;
+      color: white;
+    }
+    #chart1 {
+      overflow: visible !important; /* 允许图片溢出显示 */
+      width: 32%;
+      height:30%;
+      left:1%;
+      top:6%;
+      z-index: 4;
+      transition: transform 0.3s;
+
+
+    }
+    #chart2 {
+      overflow: visible !important;
+      width: 32%;
+      height:30%;
+      left:1%;
+      top:38%;
+      z-index: 4;
+      transition: transform 0.3s;
+    }
+    #chart3 {
+      width: 32%;
+      height:30%;
+      left:1%;
+      top:70%;
+      z-index: 4;
+      transition: transform 0.3s;
+    }
+    #chart4 {
+      width: 64%;
+      height:30%;
+      left:34%;
+      top:69.5%;
+      z-index: 5;
+      transition: transform 0.3s;
+    }
+    #chart5{
+      width: 32%;
+      height:30%;
+      left:67%;
+      top:38%;
+      z-index: 4;
+      transition: transform 0.3s;
+    }
+    #chart6{
+      overflow: visible !important;
+      width: 10%;
+      height:30%;
+      left:67%;
+      top:6%;
+      z-index: 4;
+      transition: transform 0.3s;
+    }
+    #chart7{
+      overflow: visible !important;
+      width: 21%;
+      height:30%;
+      left:78%;
+      top:6%;
+      z-index: 4;
+      transition: transform 0.3s;
+    }
+    #chart1:hover {
+      transform: translateY(-5px);
+    }
+    #chart2:hover {
+      transform: translateY(-5px);
+    }
+    #chart3:hover {
+      transform: translateY(-5px);
+    }
+    #chart4:hover {
+      transform: translateY(-5px);
+    }
+    #chart5:hover {
+      transform: translateY(-5px);
+    }
+    #chart6:hover {
+      transform: translateY(-5px);
+    }
+    #chart7:hover {
+      transform: translateY(-5px);
+    }
+
+    #chart8{
+      width: 32%;
+      height:30%;
+      left:34%;
+      top:38%;
+      z-index: 4;
+      transition: transform 0.3s;
+    }
+    #chart8:hover {
+      transform: translateY(-5px);
+    }
+    #border8 {
+      width: 32%;
+      height:30%;
+      left:34%;
+      top:38%;
+      z-index: 2;
+    }
+    #border2 {
+      width: 32%;
+      height:30%;
+      left:1%;
+      top:38%;
+      z-index: 2;
+    }
+    #border3 {
+      width: 32%;
+      height:30%;
+      left:1%;
+      top:69.5%;
+      z-index: 2;
+    }
+    #border4 {
+      width: 65%;
+      height:30%;
+      left:34%;
+      top:69.5%;
+      z-index: 2;
+    }
+
+    #border5 {
+      width: 32%;
+      height:30%;
+      left:67%;
+      top:38%;
+      z-index: 6;
+    }
+    #border6 {
+      width: 10%;
+      height:30%;
+      left:67%;
+      top:6%;
+      z-index: 2;
+    }
+    #border7 {
+      width: 21%;
+      height:30%;
+      left:78%;
+      top:6%;
+      z-index: 2;
+    }
+    #animationdiv{
+      width: 32%;
+      height:30%;
+      left:34%;
+      top:39%;
+
+      z-index: 2;
+    }
+    #numdiv1{
+      width:8%;
+      height:8%;
+      left:34%;
+      top:10%;
+      z-index: 4;
+      text-align: center;
+      font-family: 微软雅黑;
+      font-size: 1.3vw;
+      color: white;
+    }
+    #bordernum1 {
+      width: 7%;
+      height:8%;
+      left:34%;
+      top:9%;
+      z-index: 6;
+    }
+    #numdiv2{
+      width:8%;
+      height:8%;
+      left:42%;
+      top:10%;
+      z-index: 4;
+      text-align: center;
+      font-family: 微软雅黑;
+      font-size: 1.3vw;
+      color: white;
+    }
+    #bordernum2{
+      width:7%;
+      height:8%;
+      left:42%;
+      top:9%;
+      z-index: 6;
+    }
+    #numdiv3{
+      width:8%;
+      height:8%;
+      left:50%;
+      top:10%;
+      z-index: 4;
+      text-align: center;
+      font-family: 微软雅黑;
+      font-size: 1.3vw;
+      color: white;
+    }
+    #bordernum3{
+      width:7%;
+      height:8%;
+      left:50%;
+      top:9%;
+      z-index: 6;
+    }
+    #numdiv4{
+      width:8%;
+      height:8%;
+      left:58%;
+      top:10%;
+      z-index: 4;
+      text-align: center;
+      font-family: 微软雅黑;
+      font-size: 1.3vw;
+      color: white;
+    }
+    #bordernum4{
+      width:7%;
+      height:8%;
+      left:58%;
+      top:9%;
+      z-index: 6;
+    }
+
+    #numdiv5{
+      width:8%;
+      height:8%;
+      left:37%;
+      top:21%;
+      z-index: 4;
+      text-align: center;
+      font-family: 微软雅黑;
+      font-size: 1.3vw;
+      color: white;
+    }
+    #bordernum5{
+      width:8%;
+      height:8%;
+      left:37%;
+      top:28%;
+      z-index: 6;
+    }
+    #numdiv6{
+      width:14%;
+      height:8%;
+      left:51%;
+      top:21%;
+      z-index: 4;
+      text-align: center;
+      font-family: 微软雅黑;
+      font-size: 1.3vw;
+      color: white;
+    }
+    #bordernum6{
+      width:8%;
+      height:8%;
+      left:54%;
+      top:28%;
+      z-index: 6;
+    }
+    .imgtitlebar {
+      position: absolute !important;
+      max-height: 100%;
+      height: 100%;
+      width:100%;
+      display: block;
+      margin: auto;
+    }
+    .notice-board {
+      height: 250px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .notice-scroll {
+      position: absolute;
+      width: 100%;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .notice-item {
+      padding: 15px;
+      margin: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-left: 4px solid #00b4d8; /* 蓝色装饰条 */
+      border-radius: 5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .notice-time {
+      color: #90e0ef;
+      font-size: 0.9em;
+    }
+
+    .notice-content {
+      color: #fff;
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+    .chart-title {
+      color: white;
+      font-size: 15px;
+      display: flex;
+      justify-content: center; /* 水平居中 */
+      align-items: center; /* 垂直居中 */
+    }
+
+
+    .book-scroll-container {
+      height: 250px;  /* 固定高度 */
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 遮罩渐变 */
+    .book-mask {
+      position: absolute;
+      width: 100%;
+      height: 20px;
+      background: linear-gradient(180deg, rgba(12,35,64,1) 0%, rgba(12,35,64,0) 100%);
+      z-index: 2;
+    }
+
+    /* 滚动内容 */
+    .book-scroll {
+      position: absolute;
+      width: 100%;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    /* 单条图书样式 */
+    .book-item {
+      display: grid;
+      grid-template-columns: 8px 1fr;
+      padding: 1px 1px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .book-cover {
+      width: 1px;
+      height: 1px;
+      border-radius: 4px;
+    }
+
+    .book-info {
+      padding-left: 1px;
+    }
+
+    .book-title {
+      color: #fff;
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+
+    .book-author {
+      color: #63b3ed;
+      font-size: 0.9rem;
+    }
+
+    .book-press {
+      color: #a0aec0;
+      font-size: 0.8rem;
+    }
+
+    .env-table-container {
+      max-height: 250px;
+      overflow-y: auto;
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+    }
+
+    /* 表格样式 */
+    .env-data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .env-data-table th {
+      background: #2c5282;
+      padding: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .env-data-table td {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 列宽优化 */
+    .col-campus { width: 25%; }
+    .col-room { width: 25%; }
+    .col-temp { width: 25%; }
+    .col-air { width: 25%; }
+
+    /* 数据状态指示 */
+    .env-data-table td[data-status="good"] { color: #68D391; }
+    .env-data-table td[data-status="normal"] { color: #F6E05E; }
+    .env-data-table td[data-status="bad"] { color: #FC8181; }
+
+    /* 加载状态 */
+    .loading-row {
+      text-align: center;
+      color: #a0aec0;
+    }
+    #chart7 .env-data-table {
+      color: white; /* 主要字体颜色设置 */
+    }
+
+  </style>
+
+
+</head>
+<body>
+<div id="container">
+  <div id="titlebar" class="divcom"><img class="imgtitlebar" src='./img/titlebar/9.png' ></img></div>
+  <div id="title" class="divcom"><text id="titletext">东软图书馆可视化分析系统</text></div>
+  <div id="chart1" class="divcom"><img  class="imgtitlebar" src='./img/border/27.png' ><div class="chart-title">图书馆公告实时播报</div>
+    <div class="notice-board">
+      <div class="notice-mask"></div>
+      <div class="notice-scroll" id="noticeContainer"></div>
+    </div>
+  </div>
+  <div id="chart2" class="divcom"></div>
+
+  <div id="chart3" class="divcom"></div>
+
+  <div id="chart5" class="divcom"></div>
+  <div id="chart8" class="divcom"></div>
+
+
+  <div id="chart6" class="divcom">
+    <div class="chart-title">热门图书推荐</div>
+    <div class="book-scroll-container">
+      <div class="book-mask"></div>
+      <div class="book-scroll" id="bookList">
+      </div>
+    </div>
+  </div>
+  <div class="divcom" id="chart7">
+    <div class="chart-title">环境监测实时数据</div>
+    <div class="env-table-container">
+      <table class="env-data-table">
+        <thead>
+        <tr>
+          <th class="col-campus">校区</th>
+          <th class="col-room">房间ID</th>
+          <th class="col-temp">温度(℃)</th>
+          <th class="col-air">空气质量</th>
+        </tr>
+        </thead>
+        <tbody id="envDataBody">
+        <tr class="loading-row">
+          <td colspan="4">数据加载中...</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div id="chart4" class="divcom" style="position: relative;">
+    <!-- 日期选择器放在图表容器内 -->
+    <div style="position: absolute; right: 20px; top: 10px; z-index: 1000;">
+      <input type="date" id="datePicker"
+             style="padding:5px;border-radius:4px;border:1px solid #666; background: rgba(0,0,0,0.5); color: #fff;">
+    </div>
+  </div>
+
+
+  <div id="border2" class="divcom"><img  class="imgtitlebar" src='./img/border/34.png' ></div>
+  <div id="border3" class="divcom"><img  class="imgtitlebar" src='./img/border/34.png' ></div>
+  <div id="border4" class="divcom"><img  class="imgtitlebar" src='./img/border/34.png' ></div>
+  <div id="border5" class="divcom"><img  class="imgtitlebar" src='./img/border/34.png' ></div>
+  <div id="border6" class="divcom"><img  class="imgtitlebar" src='./img/border/34.png' ></div>
+  <div id="border7" class="divcom"><img  class="imgtitlebar" src='./img/border/34.png' ></div>
+  <div id="border8" class="divcom"><img  class="imgtitlebar" src='./img/border/34.png' ></div>
+  <div id="bordernum1" class="divcom"><img  class="imgtitlebar" src='./img/border/34.png' ></div>
+  <div id="bordernum2" class="divcom"><img  class="imgtitlebar" src='./img/border/34.png' ></div>
+  <div id="bordernum3" class="divcom"><img  class="imgtitlebar" src='./img/border/34.png' ></div>
+  <div id="bordernum4" class="divcom"><img  class="imgtitlebar" src='./img/border/34.png' ></div>
+  <div id="bordernum5" class="divcom"><img  class="imgtitlebar" src='./img/titlebar/img_1.png' ></div>
+  <div id="bordernum6" class="divcom"><img  class="imgtitlebar" src='./img/titlebar/img_1.png' ></div>
+  <div id="animationdiv" class="divcom"></div>
+  <div id="numdiv1" class="divcom"></div>
+  <div id="numdiv2" class="divcom"></div>
+  <div id="numdiv3" class="divcom"></div>
+  <div id="numdiv4" class="divcom"></div>
+  <div id="numdiv5" class="divcom"></div>
+  <div id="numdiv6" class="divcom"></div>
+</div>
+</body>
+
+<script>
+  // 公告栏滚动效果
+
+
+  //设定屏幕宽高比分辨率
+  var ratio = 1920/1080;
+  //动效组件引入
+  const animation = lottie.loadAnimation({
+    container: document.getElementById('animationdiv'),
+    renderer: 'svg',// 渲染方式：svg、canvas
+    loop: true,  // 循环播放，默认：false
+    autoplay: true, //自动播放 ，默认：true
+    path: 'data/animation/circle_a1.json'  // json 路径
+  })
+  //最外层容器，能够按照按照长边铺满的方式，锁定宽高比
+  function  resizeContainer(){
+    var width = document.documentElement.clientWidth; //window.innerWidth;
+    var height = document.documentElement.clientHeight;//window.innerHeight;
+    var  realRatio = width/height;
+    var container = document.getElementById('container');
+    if(realRatio>ratio){
+      //说明长度比设定比例长，左右补空白，动态设置容器宽度。
+      var realWidth = height * ratio;
+      container.style.width = realWidth+'px';
+      container.style.height = height+'px';
+
+    }else{
+      //说明高度比设定比例高，上下补空白，动态设置容器高度。
+      var realHeight = width/ratio;
+      container.style.height = realHeight+'px';
+      container.style.width = width+'px';
+    }
+  }
+
+  window.addEventListener('resize',resizeContainer);
+  resizeContainer();
+
+
+</script>
+
+<script src="js/chart1.js"></script>
+<script src="js/chart2.js"></script>
+<script src="js/chart3.js"></script>
+<script src="js/chart4.js"></script>
+<script src="js/chart5.js"></script>
+<script src="js/chart6.js"></script>
+<script src="js/chart7.js"></script>
+<script src="js/chart9.js"></script>
+<script src="js/loadstats.js"></script>
+
+
+</html>
