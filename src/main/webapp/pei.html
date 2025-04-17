@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="js/3rd/g2.min.js"></script>
+<div id="chart-div"></div>
+<script>
+    const chart = new G2.Chart({
+        container: 'chart-div',
+        theme: 'classic',
+        paddingLeft: 100,
+    });
+    fetch('/demo1_war_exploded/getData')
+        .then(response => response.json())
+        .then(data => {
+            const formattedData = data.map(item => ({
+                TYPENAME: item.type,
+                sum: item.sum
+            }));
+
+            // 配置图表
+            chart
+                .interval()
+                .data(formattedData)
+                .transform({ type: 'stackY' })
+                .encode("y", "sum")
+                .encode("color", "TYPENAME")
+                .legend('color',{
+                    title:false,
+                    position: 'bottom',
+                })
+                .axis("y", {
+                    title: "Total Order Amount",
+                    titleSpacing: 30
+                })
+                .label({
+                text: (d) => `${d.TYPENAME}\n${d.sum}`, // 显示类型和数值
+                style: {
+                    fontWeight: 'bold',
+                    textAlign: 'center'
+                },
+                position: 'outside',
+                connector: true,
+                connectorDistance: 8,
+                connectorLineWidth: 1
+            })
+
+            // 渲染图表
+            chart.coordinate({type:'theta'})
+            chart.render();
+        })
+        .catch(error => console.error('Data loading error:', error));
+</script>
+<body>
+
+</body>
+</html>
+

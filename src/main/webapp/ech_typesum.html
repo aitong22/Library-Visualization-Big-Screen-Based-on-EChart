@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<script src = "js/3rd/echarts.js"></script>
+<script src ="js/3rd/jquery.min.js"></script>
+<div id ="chart-div" style="margin:auto;text-align:center;width: 1000px; height: 400px;"></div>
+<script>
+  var myChart = echarts.init(document.getElementById('chart-div'));
+  var colorList = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
+  $.get('/demo1_war_exploded/getData',function (data) {
+    myChart.setOption({
+      dataset: {
+        dimensions: ['type', 'sum'],
+        source: data
+      },
+      tooltip: {show: true},
+      xAxis: {
+        type: 'category',
+        axisTitle: {
+          text: 'Product Type',
+        }},
+      yAxis: {
+        type: 'value',
+        axisTitle: {
+          text: 'Total Order Amount',
+        }},
+      series: [{
+          type: 'bar',
+          encode: {
+            x: 'type',
+            y: 'sum'
+          },
+          itemStyle: {
+            color: function (params) {
+              return colorList[params.dataIndex];
+            }},
+          label: {
+            show: true,
+            position: 'inside',
+            color: '#fff'
+          }}]
+    });
+  },'json')
+</script>
+<body>
+</body>
+</html>

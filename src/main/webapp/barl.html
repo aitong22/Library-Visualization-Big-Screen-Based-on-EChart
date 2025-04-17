@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="js/3rd/g2.min.js"></script>
+<div id="chart-div"></div>
+<script>
+    /**
+     * 创建一个 G2 图表实例
+     * @param {Object} options - 图表配置选项
+     * @param {string} options.container - 图表容器的 ID
+     * @param {string} options.theme - 图表主题
+     * @param {number} options.paddingLeft - 图表左侧内边距
+     */
+    const chart = new G2.Chart({
+        container: 'chart-div', // 指定图表要渲染到的 HTML 元素的 ID
+        theme: 'classic', // 设置图表的主题为经典主题
+        paddingLeft: 100, // 设置图表左侧的内边距为 100 像素
+    });
+
+    // 配置图表为柱状图
+    chart
+        .interval()
+        // 配置 X 轴
+        .axis('x',{
+            title: '区域', // 设置 X 轴的标题为“区域”
+            style:{
+                // 这里存在拼写错误，正确的属性名应该是 titleFontSize
+                tileFontSize:20,
+            },
+        })
+        // 配置 Y 轴
+        .axis('y',{
+            title: '订单金额', // 设置 Y 轴的标题为“订单金额”
+            labelFetcher:'~s', // 设置 Y 轴标签的格式化方式
+            style:{
+                titleFontSize:20, // 设置 Y 轴标题的字体大小为 20 像素
+            },
+        })
+        // 加载数据
+        .data({
+            type: 'fetch', // 使用 fetch API 来加载数据
+            value: 'data/northwind.csv', // 指定数据文件的路径
+            format: 'csv' // 指定数据的格式为 CSV
+        })
+        // 数据转换
+        .transform({ type: 'groupX', y: 'sum' }) // 按 X 轴字段进行分组，并对 Y 轴字段进行求和操作
+        // 编码数据
+        .encode('x', 'region') // 将 region 字段映射到 X 轴
+        .encode('y', 'order_amount') // 将 order_amount 字段映射到 Y 轴
+        .encode('color', 'region') // 将 region 字段映射到柱状图的颜色
+        // 配置图例
+        .legend('color',{
+            title:false, // 不显示图例的标题
+            position:'right' // 将图例放置在图表的右侧
+        })
+    ;
+    chart.render(); // 将配置好的图表渲染到指定的 HTML 元素中
+
+</script>
+
+<body>
+
+</body>
+
+</html>
