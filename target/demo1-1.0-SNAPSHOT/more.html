@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<script src="js/3rd/g2.min.js"></script>
+<div id="chart-div"></div>
+<script>
+  const chart = new G2.Chart({
+    container: "chart-div",
+    width: 1200,
+    height: 600,
+    paddingBottom: 50,
+    paddingRight: 200,
+    theme: "classic",
+  });
+
+  const facetRect=chart
+          .facetRect()
+          .attr('paddingBottom',50)
+          .data({
+            type: "fetch",
+            value: "data/rect.csv",
+            format: "csv",
+          })
+          .encode("x", "SHIPREGION")
+          .encode("y", "TYPENAME")
+          .axis('x', {
+            title: '区域',
+            titleFontSize: 20,
+          })
+          .axis("y", {
+            title: "类型",
+            titleFontSize: 20,
+          })
+
+
+          .interval()
+          .encode("x", "COMPANYNAME")
+          .encode("y", "maney")
+          .encode("color", "COMPANYNAME")
+          .axis("x", {
+            label: false,
+          })
+          .axis("y", {
+            label: false,
+            labelFormatter: "~s",
+          })
+
+  chart.render();
+</script>
+<body>
+
+</body>
+</html>
